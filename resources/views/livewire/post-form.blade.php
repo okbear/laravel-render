@@ -37,16 +37,48 @@
             @enderror
         </div>
 
-        {{-- 本文 --}}
+        {{-- 本文（EasyMDE） --}}
         <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1.5" for="body">
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">
                 本文 <span class="text-red-400">*</span>
+                <span class="text-xs font-normal text-gray-400 ml-1">Markdown が使えます</span>
             </label>
-            <textarea wire:model="body"
-                      id="body"
-                      rows="12"
-                      placeholder="投稿の内容を入力..."
-                      class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition resize-none @error('body') border-red-400 bg-red-50 @enderror"></textarea>
+
+            {{--
+                wire:ignore: Livewire がこの要素を再レンダリングしないようにする
+                Alpine.js の x-data でエディタを初期化し、変更時に Livewire に値を渡す
+            --}}
+            <div wire:ignore
+                 x-data="{
+                     editor: null,
+                     init() {
+                         this.editor = new EasyMDE({
+                             element: this.$refs.textarea,
+                             initialValue: @js($body),
+                             spellChecker: false,
+                             autosave: { enabled: false },
+                             toolbar: [
+                                 'bold', 'italic', 'strikethrough', '|',
+                                 'heading-1', 'heading-2', 'heading-3', '|',
+                                 'quote', 'unordered-list', 'ordered-list', '|',
+                                 'link', 'image', '|',
+                                 'code', 'table', '|',
+                                 'preview', 'side-by-side', 'fullscreen', '|',
+                                 'guide'
+                             ],
+                             previewClass: ['editor-preview', 'prose'],
+                             status: ['lines', 'words'],
+                             minHeight: '300px',
+                         });
+                         // エディタの変更を Livewire に同期
+                         this.editor.codemirror.on('change', () => {
+                             @this.set('body', this.editor.value());
+                         });
+                     }
+                 }">
+                <textarea x-ref="textarea" id="body"></textarea>
+            </div>
+
             @error('body')
                 <p class="text-red-500 text-xs mt-1.5 flex items-center gap-1">
                     <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>

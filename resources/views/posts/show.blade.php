@@ -43,7 +43,9 @@
 
             <h1 class="text-3xl font-bold text-gray-900 mb-8 leading-tight">{{ $post->title }}</h1>
 
-            <div class="prose prose-gray max-w-none text-gray-700 leading-relaxed whitespace-pre-wrap text-base">{{ $post->body }}</div>
+            <div class="prose prose-gray prose-indigo max-w-none text-gray-700 leading-relaxed">
+                {!! \App\Support\Markdown::toHtml($post->body) !!}
+            </div>
         </div>
 
         {{-- アクションバー --}}
