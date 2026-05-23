@@ -1,4 +1,4 @@
-FROM php:8.3-fpm
+FROM php:8.4-fpm
 
 # システムパッケージ
 RUN apt-get update && apt-get install -y \
@@ -24,7 +24,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# 依存関係をインストール（キャッシュ活用のため先にコピー）
+# 依存関係インストール（アプリコードより先にコピーしてキャッシュを活用）
 COPY composer.json composer.lock ./
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
@@ -38,8 +38,8 @@ COPY . .
 RUN npm run build
 
 # パーミッション設定
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
 
 # NGINX 設定
 COPY nginx.conf /etc/nginx/sites-available/default
