@@ -1,0 +1,33 @@
+{
+  "name": "Laravel Sail",
+  "dockerComposeFile": ["../compose.yaml"],
+  "service": "laravel.test",
+  "workspaceFolder": "/var/www/html",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "bmewburn.vscode-intelephense-client",
+        "onecentlin.laravel-blade",
+        "amiralizadeh9480.laravel-extra-intellisense",
+        "ryannaddy.laravel-artisan",
+        "mikestead.dotenv",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "EditorTeam.EditorConfig"
+      ],
+      "settings": {
+        "php.validate.executablePath": "/usr/bin/php",
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "[php]": {
+          "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
+        }
+      }
+    }
+  },
+
+  "remoteUser": "sail",
+
+  "postCreateCommand": "php artisan key:generate --ansi || true"
+}
