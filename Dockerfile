@@ -1,20 +1,53 @@
-FROM richarvey/nginx-php-fpm:3.1.6
+FROM php:8.4-fpm
 
+# システムパッケージ
+RUN apt-get update && apt-get install -y \
+    nginx \
+    git \
+    curl \
+    zip \
+    unzip \
+    supervisor \
+    libpq-dev \
+    libpng-dev \
+    libonig-dev \
+    libxml2-dev \
+    && docker-php-ext-install pdo pdo_pgsql mbstring exif pcntl bcmath gd \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Node.js
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+WORKDIR /var/www/html
+
+# 依存関係インストール（ビルド時）
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
+
+COPY package.json package-lock.json ./
+RUN npm ci
+
+# アプリ全体をコピー
 COPY . .
 
-# Image config
-ENV SKIP_COMPOSER 1
-ENV WEBROOT /var/www/html/public
-ENV PHP_ERRORS_STDERR 1
-ENV RUN_SCRIPTS 1
-ENV REAL_IP_HEADER 1
+# フロントエンドビルド
+RUN npm run build && rm -rf node_modules
 
-# Laravel config
-ENV APP_ENV production
-ENV APP_DEBUG false
-ENV LOG_CHANNEL stderr
+# パーミッション
+RUN chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
 
-# Allow composer to run as root
-ENV COMPOSER_ALLOW_SUPERUSER 1
+# NGINX 設定
+COPY nginx.conf /etc/nginx/sites-available/default
 
-CMD ["/start.sh"]
+# Supervisor 設定（PHP-FPM + NGINX を同時管理）
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+EXPOSE 80
+
+CMD ["/var/www/html/scripts/00-laravel-deploy.sh"]
