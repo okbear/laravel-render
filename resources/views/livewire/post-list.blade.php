@@ -32,6 +32,14 @@
                     <option value="{{ $cat }}">{{ $cat }}</option>
                 @endforeach
             </select>
+            @if (\App\Support\AdminAccess::allows())
+                <select wire:model.live="status"
+                        class="border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-transparent transition bg-white">
+                    <option value="">すべてのステータス</option>
+                    <option value="published">公開済み</option>
+                    <option value="draft">下書き</option>
+                </select>
+            @endif
         </div>
     </div>
 

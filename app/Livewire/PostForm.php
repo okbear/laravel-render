@@ -20,7 +20,7 @@ class PostForm extends Component
     #[Validate('required|string|max:100')]
     public string $category = '';
 
-    public bool $published = false;
+    public bool $published = true;
 
     public function mount(?Post $post = null): void
     {
