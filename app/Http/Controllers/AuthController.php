@@ -9,10 +9,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
+use Symfony\Component\HttpFoundation\RedirectResponse as SymfonyRedirectResponse;
 
 class AuthController extends Controller
 {
-    public function redirectToGoogle(): RedirectResponse
+    public function redirectToGoogle(): SymfonyRedirectResponse
     {
         return Socialite::driver('google')->redirect();
     }

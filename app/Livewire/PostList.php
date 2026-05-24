@@ -34,11 +34,11 @@ class PostList extends Component
     {
         $posts = Post::query()
             ->published()
-            ->when($this->search, fn($q) => $q->where(function ($query): void {
+            ->when($this->search, fn ($q) => $q->where(function ($query): void {
                 $query->where('title', 'like', "%{$this->search}%")
                     ->orWhere('body', 'like', "%{$this->search}%");
             }))
-            ->when($this->category, fn($q) => $q->where('category', $this->category))
+            ->when($this->category, fn ($q) => $q->where('category', $this->category))
             ->latest()
             ->paginate(9);
 

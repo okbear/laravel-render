@@ -25,10 +25,10 @@ class PostForm extends Component
     public function mount(?Post $post = null): void
     {
         if ($post && $post->exists) {
-            $this->post      = $post;
-            $this->title     = $post->title;
-            $this->body      = $post->body;
-            $this->category  = $post->category;
+            $this->post = $post;
+            $this->title = $post->title;
+            $this->body = $post->body;
+            $this->category = $post->category;
             $this->published = $post->published;
         }
     }
@@ -40,9 +40,9 @@ class PostForm extends Component
         $this->validate();
 
         $data = [
-            'title'     => $this->title,
-            'body'      => $this->body,
-            'category'  => $this->category,
+            'title' => $this->title,
+            'body' => $this->body,
+            'category' => $this->category,
             'published' => $this->published,
         ];
 

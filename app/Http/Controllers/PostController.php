@@ -11,6 +11,7 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::published()->latest()->paginate(10);
+
         return view('posts.index', compact('posts'));
     }
 
@@ -22,9 +23,9 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title'     => 'required|string|max:255',
-            'body'      => 'required|string',
-            'category'  => 'required|string|max:100',
+            'title' => 'required|string|max:255',
+            'body' => 'required|string',
+            'category' => 'required|string|max:100',
             'published' => 'boolean',
         ]);
 
@@ -52,9 +53,9 @@ class PostController extends Controller
     public function update(Request $request, Post $post)
     {
         $validated = $request->validate([
-            'title'     => 'required|string|max:255',
-            'body'      => 'required|string',
-            'category'  => 'required|string|max:100',
+            'title' => 'required|string|max:255',
+            'body' => 'required|string',
+            'category' => 'required|string|max:100',
             'published' => 'boolean',
         ]);
 

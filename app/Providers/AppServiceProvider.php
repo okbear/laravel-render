@@ -15,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(UrlGenerator $url): void
     {
         // Render は TLS を終端するので、本番環境では HTTPS を強制する
-        if (env('APP_ENV') === 'production') {
+        if (config('app.env') === 'production') {
             $url->forceScheme('https');
         }
     }
