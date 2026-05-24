@@ -12,5 +12,16 @@ php artisan migrate --force
 echo "=== Starting PHP-FPM ==="
 php-fpm -D
 
+# PHP-FPM の TCP ポートが開くまで待つ
+echo "=== Waiting for PHP-FPM ==="
+for i in $(seq 1 15); do
+    if nc -z 127.0.0.1 9000 2>/dev/null; then
+        echo "PHP-FPM ready"
+        break
+    fi
+    echo "Waiting... ($i)"
+    sleep 1
+done
+
 echo "=== Starting NGINX ==="
 nginx -g "daemon off;"

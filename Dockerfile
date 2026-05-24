@@ -7,6 +7,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     zip \
     unzip \
+    netcat-openbsd \
     libpq-dev \
     libpng-dev \
     libonig-dev \
