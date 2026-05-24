@@ -53,10 +53,12 @@
                         <span class="text-xs font-medium bg-indigo-50 text-indigo-600 px-2.5 py-1 rounded-full">
                             {{ $post->category }}
                         </span>
-                        @if ($post->published)
-                            <span class="text-xs font-medium bg-emerald-50 text-emerald-600 px-2.5 py-1 rounded-full">公開</span>
-                        @else
-                            <span class="text-xs font-medium bg-amber-50 text-amber-600 px-2.5 py-1 rounded-full">下書き</span>
+                        @if (\App\Support\AdminAccess::allows())
+                            @if ($post->published)
+                                <span class="text-xs font-medium bg-emerald-50 text-emerald-600 px-2.5 py-1 rounded-full">公開</span>
+                            @else
+                                <span class="text-xs font-medium bg-amber-50 text-amber-600 px-2.5 py-1 rounded-full">下書き</span>
+                            @endif
                         @endif
                     </div>
                     <h2 class="font-bold text-gray-900 mb-2 line-clamp-2 leading-snug">
