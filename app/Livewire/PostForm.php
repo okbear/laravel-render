@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Post;
+use App\Support\AdminAccess;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
@@ -34,6 +35,8 @@ class PostForm extends Component
 
     public function save(): void
     {
+        abort_unless(AdminAccess::allows(), 403);
+
         $this->validate();
 
         $data = [

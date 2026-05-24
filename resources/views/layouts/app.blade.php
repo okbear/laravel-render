@@ -66,13 +66,28 @@
             <span class="text-2xl">✍️</span>
             MyBlog
         </a>
-        <a href="{{ route('posts.create') }}" wire:navigate
-           class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 rounded-xl transition-colors">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-            </svg>
-            新規投稿
-        </a>
+        <div class="flex items-center gap-3">
+            @if (\App\Support\AdminAccess::allows())
+                <a href="{{ route('posts.create') }}" wire:navigate
+                   class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 rounded-xl transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    新規投稿
+                </a>
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="text-sm text-gray-500 hover:text-gray-700 transition">
+                        ログアウト
+                    </button>
+                </form>
+            @else
+                <a href="{{ route('login.google') }}"
+                   class="text-sm text-gray-500 hover:text-indigo-600 transition">
+                    管理ログイン
+                </a>
+            @endif
+        </div>
     </div>
 </header>
 

@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Support\AdminAccess;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::latest()->paginate(10);
+        $posts = Post::published()->latest()->paginate(10);
         return view('posts.index', compact('posts'));
     }
 
@@ -36,6 +37,10 @@ class PostController extends Controller
 
     public function show(Post $post)
     {
+        if (! $post->published && ! AdminAccess::allows()) {
+            abort(404);
+        }
+
         return view('posts.show', compact('post'));
     }
 
